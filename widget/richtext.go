@@ -20,7 +20,8 @@ import (
 )
 
 const (
-	passwordChar = "•"
+	passwordChar       = "•"
+	maxVisualCacheSize = 1000
 )
 
 // RichText represents the base element for a rich text-based widget.
@@ -198,7 +199,7 @@ func (t *RichText) deleteFromTo(lowBound int, highBound int) string {
 func (t *RichText) cachedSegmentVisual(seg RichTextSegment, offset int) fyne.CanvasObject {
 	t.cacheLock.Lock()
 	defer t.cacheLock.Unlock()
-	if t.visualCache == nil {
+	if t.visualCache == nil || len(t.visualCache) > maxVisualCacheSize {
 		t.visualCache = make(map[RichTextSegment][]fyne.CanvasObject)
 	}
 
